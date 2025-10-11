@@ -1,7 +1,10 @@
 import React from "react";
+import Mudra from "./Mudra";
 
 const App = () => {
-  return <div className="text-3xl font-bold underline">App</div>;
+  return <div>
+    <Mudra/>
+  </div>;
 };
 
 export default App;
