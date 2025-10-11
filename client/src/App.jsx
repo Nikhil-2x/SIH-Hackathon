@@ -1,6 +1,5 @@
 import React from "react";
-import Mudra from "./Mudra";
-
+import Mudra from "./components/Mudra/Mudra";
 import { Routes } from "react-router-dom";
 
 const App = () => {
