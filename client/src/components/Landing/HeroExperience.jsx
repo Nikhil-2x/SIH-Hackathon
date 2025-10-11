@@ -6,6 +6,8 @@ import Particles from "./Particles";
 
 import * as THREE from "three";
 import { Dance } from "./Dance";
+import { Women } from "./Women";
+import { Womens } from "./WomenTwo";
 
 const HeroExperience = () => {
   return (
@@ -23,10 +25,13 @@ const HeroExperience = () => {
         />
         <group
           position={[0, 0, 0]}
-          scale={[0.025, 0.025, 0.025]}
-          rotation={[0, 0, 0]}
+          // scale={[0.025, 0.025, 0.025]}
+          scale={[8, 8, 8]}
+          rotation={[0, -Math.PI / 2, 0]}
         >
-          <Dance />
+          {/* <Dance /> */}
+          {/* <Women /> */}
+          <Womens />
         </group>
       </Suspense>
     </Canvas>

@@ -1,6 +1,5 @@
 import React from "react";
 import Hero from "../components/Landing/Hero";
-// import Hero from "../components/Hero";
 
 const Home = () => {
   return (
