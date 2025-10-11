@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import HeroLights from "./HeroLights";
 import Particles from "./Particles";
-import { Radio } from "./Radio";
+
 import * as THREE from "three";
 import { Dance } from "./Dance";
 
