@@ -18,12 +18,12 @@ function Mudra() {
   const fileInputRef = useRef(null);
 
   const danceForms = [
-    { id: 'bharatanatyam', name: 'Bharatanatyam', color: 'from-orange-500 to-red-600' },
-    { id: 'odissi', name: 'Odissi', color: 'from-blue-500 to-indigo-600' },
-    { id: 'kuchipudi', name: 'Kuchipudi', color: 'from-purple-500 to-pink-600' },
-    { id: 'mohiniattam', name: 'Mohiniattam', color: 'from-green-500 to-teal-600' },
-    { id: 'manipuri', name: 'Manipuri', color: 'from-yellow-500 to-orange-600' },
-    { id: 'kathak', name: 'Kathak', color: 'from-red-500 to-pink-600' }
+    { id: 'bharatanatyam', name: 'Bharatanatyam' },
+    { id: 'odissi', name: 'Odissi' },
+    { id: 'kuchipudi', name: 'Kuchipudi' },
+    { id: 'mohiniattam', name: 'Mohiniattam' },
+    { id: 'manipuri', name: 'Manipuri' },
+    { id: 'kathak', name: 'Kathak' }
   ];
 
   const mockMudras = [
@@ -78,7 +78,6 @@ function Mudra() {
       const capturedImageUrl = canvasRef.current.toDataURL();
       setUploadedImage(capturedImageUrl);
       
-      // Convert to File object for API
       canvasRef.current.toBlob((blob) => {
         const file = new File([blob], `capture-${Date.now()}.jpg`, { type: 'image/jpeg' });
         setSelectedFile(file);
@@ -149,20 +148,14 @@ function Mudra() {
 
   const safeBase64Decode = (str) => {
     try {
-      // Clean the base64 string
       let cleaned = str.trim().replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
-      
-      // Add padding if needed
       const mod4 = cleaned.length % 4;
       if (mod4 > 0) {
         cleaned += '='.repeat(4 - mod4);
       }
-      
-      // Validate base64 format
       if (!/^[A-Za-z0-9+/]*={0,2}$/.test(cleaned)) {
         throw new Error('Invalid base64 format');
       }
-      
       return atob(cleaned);
     } catch (error) {
       console.error('Base64 decode error:', error);
@@ -198,14 +191,14 @@ function Mudra() {
 
       if (contentType.includes('application/json')) {
         const json = await resp.json();
-        fullApiResponse = json; // Store the full API response
+        fullApiResponse = json;
         extracted = await extractImageFromApiResponse(json);
         if (!extracted) {
           throw new Error('API returned JSON but no base64 image field found');
         }
       } else if (contentType.includes('text/') || contentType.includes('application/octet-stream')) {
         const txt = (await resp.text()).trim();
-        fullApiResponse = { rawResponse: txt }; // Store raw response
+        fullApiResponse = { rawResponse: txt };
         if (txt.startsWith('data:') || txt.length > 50) {
           extracted = { 
             kind: txt.startsWith('http') ? 'url' : (txt.startsWith('data:') ? 'base64' : 'base64'), 
@@ -254,11 +247,11 @@ function Mudra() {
           finalDataUri = s;
         } else {
           try {
-            safeBase64Decode(s); // Validate before processing
-            let cleaned = s.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
-            const mod4 = cleaned.length % 4;
-            if (mod4 > 0) cleaned += '='.repeat(4 - mod4);
-            finalDataUri = `data:image/jpeg;base64,${cleaned}`;
+            safeBase64Decode(s);
+          let cleaned = s.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+          const mod4 = cleaned.length % 4;
+          if (mod4 > 0) cleaned += '='.repeat(4 - mod4);
+          finalDataUri = `data:image/jpeg;base64,${cleaned}`;
           } catch (decodeError) {
             throw new Error('Invalid base64 data in API response: ' + decodeError.message);
           }
@@ -267,7 +260,6 @@ function Mudra() {
 
       setResultImageData(finalDataUri);
       
-      // Set results with full API response data instead of mock data
       setResults({
         fullApiResponse: fullApiResponse,
         extractedImagePath: extracted.path,
@@ -277,7 +269,6 @@ function Mudra() {
           status: resp.status,
           statusText: resp.statusText
         },
-        // Keep some mock data for backward compatibility, but prioritize real API data
         mudras: fullApiResponse?.mudras || fullApiResponse?.detections || fullApiResponse?.results || mockMudras,
         metadata: {
           processingTime: fullApiResponse?.processingTime || fullApiResponse?.time || '0.42s',
@@ -333,22 +324,24 @@ function Mudra() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
-      <div className="bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 text-white shadow-2xl">
+    <div className="min-h-screen bg-gray-900">
+      <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-white shadow-2xl">
         <div className="container mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="bg-white/20 backdrop-blur-lg p-3 rounded-2xl">
+              <div className="bg-gray-600/30 backdrop-blur-lg p-3 rounded-2xl">
                 <Sparkles className="w-8 h-8" />
               </div>
               <div>
                 <h1 className="text-4xl font-bold tracking-tight">Mudra Vision AI</h1>
-                <p className="text-orange-100 mt-1">Bharatiya Natya Gesture Recognition System</p>
+                <p className="text-gray-300 mt-1">Bharatiya Natya Gesture Recognition System</p>
               </div>
             </div>
-            <button className="bg-white/20 hover:bg-white/30 backdrop-blur-lg p-3 rounded-xl transition-all">
-              <Settings className="w-6 h-6" />
-            </button>
+            <div className="flex items-center space-x-3">
+              <button className="bg-gray-600/30 hover:bg-gray-600/50 backdrop-blur-lg p-3 rounded-xl transition-all duration-300 hover:scale-105">
+                <Settings className="w-6 h-6" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -356,20 +349,20 @@ function Mudra() {
       <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl p-6 border border-orange-100">
+            <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-6 border">
               <div className="flex items-center space-x-2 mb-4">
-                <BookOpen className="w-5 h-5 text-orange-600" />
-                <h2 className="text-xl font-bold text-gray-800">Select Dance Form</h2>
+                <BookOpen className="w-5 h-5 text-orange-400" />
+                <h2 className="text-xl font-bold text-gray-200">Select Dance Form</h2>
               </div>
               <div className="space-y-3">
                 {danceForms.map((form) => (
                   <button
                     key={form.id}
                     onClick={() => setSelectedDanceForm(form.id)}
-                    className={`w-full text-left p-4 rounded-xl transition-all ${
+                    className={`w-full text-left p-4 rounded-xl transition-all duration-300 hover:scale-105 ${
                       selectedDanceForm === form.id
                         ? `bg-gradient-to-r ${form.color} text-white shadow-lg scale-105`
-                        : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+                        : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -381,28 +374,28 @@ function Mudra() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-6 border border-orange-100">
+            <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-6 border">
               <div className="flex items-center space-x-2 mb-4">
-                <Eye className="w-5 h-5 text-orange-600" />
-                <h2 className="text-xl font-bold text-gray-800">Detection Mode</h2>
+                <Eye className="w-5 h-5 text-orange-400" />
+                <h2 className="text-xl font-bold text-gray-200">Detection Mode</h2>
               </div>
               <div className="space-y-3">
                 <button
                   onClick={() => setDetectionMode('full-body')}
-                  className={`w-full p-3 rounded-xl transition-all ${
+                  className={`w-full p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                     detectionMode === 'full-body'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                      : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg scale-105'
+                      : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
                   }`}
                 >
                   Full Body Analysis
                 </button>
                 <button
                   onClick={() => setDetectionMode('hands-only')}
-                  className={`w-full p-3 rounded-xl transition-all ${
+                  className={`w-full p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                     detectionMode === 'hands-only'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                      : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg scale-105'
+                      : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
                   }`}
                 >
                   Hands Only
@@ -410,19 +403,19 @@ function Mudra() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl shadow-xl p-6 text-white">
+            <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl shadow-xl p-6 text-white">
               <h3 className="font-bold text-lg mb-4">Model Performance</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-orange-100">Accuracy</span>
+                  <span className="text-gray-300">Accuracy</span>
                   <span className="font-bold text-xl">94.7%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-orange-100">Speed</span>
+                  <span className="text-gray-300">Speed</span>
                   <span className="font-bold text-xl">35 FPS</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-orange-100">Mudras DB</span>
+                  <span className="text-gray-300">Mudras DB</span>
                   <span className="font-bold text-xl">52</span>
                 </div>
               </div>
@@ -430,14 +423,14 @@ function Mudra() {
           </div>
 
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl border border-orange-100 overflow-hidden">
-              <div className="flex border-b border-gray-200">
+            <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl border overflow-hidden">
+              <div className="flex border-gray-700 border-b">
                 <button
                   onClick={() => setActiveTab('upload')}
-                  className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all ${
+                  className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all duration-300 ${
                     activeTab === 'upload'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-gray-700'
                   }`}
                 >
                   <Upload className="w-5 h-5" />
@@ -448,10 +441,10 @@ function Mudra() {
                     setActiveTab('camera');
                     if (!cameraActive) startCamera();
                   }}
-                  className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all ${
+                  className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all duration-300 ${
                     activeTab === 'camera'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-gray-700'
                   }`}
                 >
                   <Camera className="w-5 h-5" />
@@ -459,10 +452,10 @@ function Mudra() {
                 </button>
                 <button
                   onClick={() => setActiveTab('realtime')}
-                  className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all ${
+                  className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all duration-300 ${
                     activeTab === 'realtime'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-gray-700'
                   }`}
                 >
                   <Video className="w-5 h-5" />
@@ -475,11 +468,11 @@ function Mudra() {
                   {!uploadedImage ? (
                     <div
                       onClick={() => fileInputRef.current?.click()}
-                      className="border-4 border-dashed border-orange-300 rounded-2xl p-16 text-center cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all"
+                      className="border-4 border-dashed border-orange-400 hover:border-orange-300 hover:bg-orange-900/20 rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 hover:scale-105"
                     >
                       <Image className="w-16 h-16 mx-auto text-orange-400 mb-4" />
-                      <p className="text-xl font-semibold text-gray-700 mb-2">Upload Dance Image</p>
-                      <p className="text-gray-500">Click to browse or drag and drop your image here</p>
+                      <p className="text-xl font-semibold text-gray-200 mb-2">Upload Dance Image</p>
+                      <p className="text-gray-400">Click to browse or drag and drop your image here</p>
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -493,20 +486,20 @@ function Mudra() {
                       <img
                         src={uploadedImage}
                         alt="Uploaded"
-                        className="w-full h-96 object-contain rounded-xl bg-gray-100"
+                        className="w-full h-96 object-contain rounded-xl bg-gray-700"
                       />
                       <div className="flex space-x-3">
                         <button
                           onClick={analyzeMudra}
                           disabled={isAnalyzing}
-                          className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:shadow-xl transition-all disabled:opacity-50"
+                          className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:shadow-xl transition-all disabled:opacity-50 hover:scale-105"
                         >
                           <Zap className="w-5 h-5" />
                           <span>{isAnalyzing ? 'Analyzing...' : 'Analyze Mudra'}</span>
                         </button>
                         <button
                           onClick={resetAll}
-                          className="px-6 bg-gray-100 text-gray-700 py-4 rounded-xl font-bold hover:bg-gray-200 transition-all"
+                          className="px-6 bg-gray-700 text-gray-300 hover:bg-gray-600 py-4 rounded-xl font-bold transition-all hover:scale-105"
                         >
                           <RotateCcw className="w-5 h-5" />
                         </button>
@@ -517,27 +510,27 @@ function Mudra() {
               )}
 
               {activeTab === 'camera' && (
-                <div className="p-8">
-                  <div className="relative bg-black rounded-xl overflow-hidden">
+                <div className="p-6">
+                  <div className="relative bg-black rounded-lg overflow-hidden">
                     <video
                       ref={videoRef}
                       autoPlay
                       playsInline
-                      className="w-full h-96 object-cover"
+                      className="w-full h-80 object-cover"
                     />
                     <canvas ref={canvasRef} className="hidden" />
                   </div>
-                  <div className="flex space-x-3 mt-4">
+                  <div className="flex space-x-2 mt-3">
                     <button
                       onClick={captureImage}
-                      className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:shadow-xl transition-all"
+                      className="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-medium flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-all"
                     >
-                      <Camera className="w-5 h-5" />
+                      <Camera className="w-4 h-4" />
                       <span>Capture Image</span>
                     </button>
                     <button
                       onClick={stopCamera}
-                      className="px-6 bg-gray-100 text-gray-700 py-4 rounded-xl font-bold hover:bg-gray-200 transition-all"
+                      className="px-4 bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-all"
                     >
                       Stop
                     </button>
@@ -546,32 +539,32 @@ function Mudra() {
               )}
 
               {activeTab === 'realtime' && (
-                <div className="p-8">
-                  <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-16 text-center">
-                    <Video className="w-16 h-16 mx-auto text-orange-400 mb-4" />
-                    <p className="text-white text-xl font-semibold mb-2">Real-time Detection Coming Soon</p>
-                    <p className="text-gray-400">Live mudra recognition with webcam feed</p>
+                <div className="p-6">
+                  <div className="bg-gray-800 rounded-lg p-12 text-center">
+                    <Video className="w-12 h-12 mx-auto text-indigo-400 mb-3" />
+                    <p className="text-white text-lg font-medium mb-1">Real-time Detection Coming Soon</p>
+                    <p className="text-gray-400 text-sm">Live mudra recognition with webcam feed</p>
                   </div>
                 </div>
               )}
             </div>
 
             {error && (
-              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-red-800">
+              <div className="bg-red-900/50 border-red-700 text-red-200 border-2 rounded-xl p-4">
                 <p className="font-semibold">{error}</p>
               </div>
             )}
 
             {resultImageData && (
-              <div className="bg-white rounded-2xl shadow-xl p-8 border border-orange-100">
+              <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-8 border">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Image className="w-6 h-6 text-orange-600" />
-                    <h2 className="text-2xl font-bold text-gray-800">Processed Image</h2>
+                    <Image className="w-6 h-6 text-orange-400" />
+                    <h2 className="text-2xl font-bold text-gray-200">Processed Image</h2>
                   </div>
                   <button 
                     onClick={handleDownload}
-                    className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all flex items-center space-x-2 font-bold"
+                    className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all flex items-center space-x-2 font-bold hover:scale-105"
                   >
                     <Download className="w-5 h-5" />
                     <span>Download</span>
@@ -586,26 +579,40 @@ function Mudra() {
             )}
 
             {results && (
-              <div className="bg-white rounded-2xl shadow-xl p-8 border border-orange-100">
+              <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-8 border">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Grid3x3 className="w-6 h-6 text-orange-600" />
-                    <h2 className="text-2xl font-bold text-gray-800">Detection Results</h2>
+                    <Grid3x3 className="w-6 h-6 text-orange-400" />
+                    <h2 className="text-2xl font-bold text-gray-200">Detection Results</h2>
                   </div>
-                  <button className="bg-orange-100 text-orange-600 px-4 py-2 rounded-lg hover:bg-orange-200 transition-all flex items-center space-x-2">
+                  <button className="bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-lg transition-all flex items-center space-x-2 hover:scale-105">
                     <Download className="w-4 h-4" />
                     <span>Export</span>
                   </button>
                 </div>
 
-                {/* API Response Fields - Individual styled fields */}
+                {/* Mudra Information Fields */}
+                {results.fullApiResponse?.Mudra_info && (
+                  <div className="mb-6">
+                    <h3 className="font-semibold text-base text-gray-800 mb-4">Mudra Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(results.fullApiResponse.Mudra_info).map(([key, value]) => (
+                        <div key={key} className="bg-indigo-50 rounded-lg p-4 border border-indigo-200">
+                          <p className="text-indigo-600 text-sm font-medium mb-1">{key}</p>
+                          <p className="text-gray-800 font-semibold">{value}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* API Response Fields */}
                 {results.fullApiResponse && Object.keys(results.fullApiResponse).length > 0 && (
                   <div className="mb-6">
-                    <h3 className="font-bold text-lg text-gray-800 mb-4">API Response Fields</h3>
+                    <h3 className="font-bold text-lg text-gray-200 mb-4">API Response Fields</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {Object.entries(results.fullApiResponse).map(([key, value]) => {
-                        // Skip displaying base64 image data as a field
-                        if (key === 'image_base64' || (typeof value === 'string' && (value.includes('data:image') || value.length > 1000))) {
+                        if (key === 'Mudra_info' || key === 'image_base64' || (typeof value === 'string' && (value.includes('data:image') || value.length > 1000))) {
                           return null;
                         }
                         
@@ -613,48 +620,48 @@ function Mudra() {
                           const lowerKey = key.toLowerCase();
                           if (lowerKey.includes('time') || lowerKey.includes('duration')) {
                             return {
-                              bg: 'from-blue-50 to-blue-100',
-                              labelColor: 'text-blue-600',
-                              valueColor: 'text-blue-900',
+                              bg: 'from-blue-900/50 to-blue-800/50',
+                              labelColor: 'text-blue-400',
+                              valueColor: 'text-blue-200',
                               icon: '⏱️'
                             };
                           }
                           if (lowerKey.includes('confidence') || lowerKey.includes('score') || lowerKey.includes('accuracy')) {
                             return {
-                              bg: 'from-green-50 to-green-100',
-                              labelColor: 'text-green-600',
-                              valueColor: 'text-green-900',
+                              bg: 'from-green-900/50 to-green-800/50',
+                              labelColor: 'text-green-400',
+                              valueColor: 'text-green-200',
                               icon: '🎯'
                             };
                           }
                           if (lowerKey.includes('quality') || lowerKey.includes('status')) {
                             return {
-                              bg: 'from-purple-50 to-purple-100',
-                              labelColor: 'text-purple-600',
-                              valueColor: 'text-purple-900',
+                              bg: 'from-purple-900/50 to-purple-800/50',
+                              labelColor: 'text-purple-400',
+                              valueColor: 'text-purple-200',
                               icon: '✨'
                             };
                           }
                           if (lowerKey.includes('count') || lowerKey.includes('number') || lowerKey.includes('detected')) {
                             return {
-                              bg: 'from-orange-50 to-orange-100',
-                              labelColor: 'text-orange-600',
-                              valueColor: 'text-orange-900',
+                              bg: 'from-orange-900/50 to-orange-800/50',
+                              labelColor: 'text-orange-400',
+                              valueColor: 'text-orange-200',
                               icon: '📊'
                             };
                           }
                           if (lowerKey.includes('error') || lowerKey.includes('fail')) {
                             return {
-                              bg: 'from-red-50 to-red-100',
-                              labelColor: 'text-red-600',
-                              valueColor: 'text-red-900',
+                              bg: 'from-red-900/50 to-red-800/50',
+                              labelColor: 'text-red-400',
+                              valueColor: 'text-red-200',
                               icon: '⚠️'
                             };
                           }
                           return {
-                            bg: 'from-gray-50 to-gray-100',
-                            labelColor: 'text-gray-600',
-                            valueColor: 'text-gray-900',
+                            bg: 'from-gray-700 to-gray-600',
+                            labelColor: 'text-gray-400',
+                            valueColor: 'text-gray-200',
                             icon: '📋'
                           };
                         };
@@ -682,7 +689,7 @@ function Mudra() {
                         const style = getFieldStyle(key);
 
                         return (
-                          <div key={key} className={`bg-gradient-to-br ${style.bg} rounded-xl p-4 border shadow-sm hover:shadow-md transition-all`}>
+                          <div key={key} className={`bg-gradient-to-br ${style.bg} rounded-xl p-4 border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105`}>
                             <div className="flex items-center space-x-2 mb-2">
                               <span className="text-lg">{style.icon}</span>
                               <p className={`${style.labelColor} text-sm font-semibold`}>{formatLabel(key)}</p>
@@ -697,226 +704,60 @@ function Mudra() {
                   </div>
                 )}
 
-                {/* API Response Status */}
-                <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
-                  <h3 className="font-bold text-lg text-blue-800 mb-2">API Response Status</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                      <p className="text-blue-600 text-sm font-semibold">Status Code</p>
-                      <p className="text-xl font-bold text-blue-900">{results.responseHeaders.status}</p>
-                    </div>
-                    <div>
-                      <p className="text-blue-600 text-sm font-semibold">Content Type</p>
-                      <p className="text-sm font-bold text-blue-900 truncate">{results.responseHeaders.contentType}</p>
-                    </div>
-                    <div>
-                      <p className="text-blue-600 text-sm font-semibold">Image Extracted From</p>
-                      <p className="text-sm font-bold text-blue-900">{results.extractedImagePath}</p>
-                    </div>
-                    <div>
-                      <p className="text-blue-600 text-sm font-semibold">Response Size</p>
-                      <p className="text-sm font-bold text-blue-900">{results.metadata.responseSize}</p>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Detection Metadata */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-center">
-                    <p className="text-blue-600 text-sm font-semibold">Processing Time</p>
-                    <p className="text-2xl font-bold text-blue-900">{results.metadata.processingTime}</p>
+                  <div className="bg-gradient-to-br from-blue-900/50 to-blue-800/50 border-blue-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                    <p className="text-blue-400 text-sm font-semibold">Processing Time</p>
+                    <p className="text-blue-200 text-2xl font-bold">{results.metadata.processingTime}</p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 text-center">
-                    <p className="text-green-600 text-sm font-semibold">Image Quality</p>
-                    <p className="text-2xl font-bold text-green-900">{results.metadata.imageQuality}</p>
+                  <div className="bg-gradient-to-br from-green-900/50 to-green-800/50 border-green-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                    <p className="text-green-400 text-sm font-semibold">Image Quality</p>
+                    <p className="text-green-200 text-2xl font-bold">{results.metadata.imageQuality}</p>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 text-center">
-                    <p className="text-purple-600 text-sm font-semibold">Hands Detected</p>
-                    <p className="text-2xl font-bold text-purple-900">{results.metadata.handsDetected}</p>
+                  <div className="bg-gradient-to-br from-purple-900/50 to-purple-800/50 border-purple-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                    <p className="text-purple-400 text-sm font-semibold">Hands Detected</p>
+                    <p className="text-purple-200 text-2xl font-bold">{results.metadata.handsDetected}</p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 text-center">
-                    <p className="text-orange-600 text-sm font-semibold">Pose Confidence</p>
-                    <p className="text-2xl font-bold text-orange-900">{results.metadata.bodyPoseConfidence}%</p>
+                  <div className="bg-gradient-to-br from-orange-900/50 to-orange-800/50 border-orange-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                    <p className="text-orange-400 text-sm font-semibold">Pose Confidence</p>
+                    <p className="text-orange-200 text-2xl font-bold">{results.metadata.bodyPoseConfidence}%</p>
                   </div>
                 </div>
 
                 {/* Identified Mudras */}
                 {results.mudras && results.mudras.length > 0 && (
-                  <div className="space-y-6 mb-6">
-                    <h3 className="font-bold text-lg text-gray-800 mb-4">Identified Mudras</h3>
-                    {results.mudras.map((mudra, idx) => (
-                      <div key={idx} className="space-y-4">
-                        {/* Main Mudra Card */}
-                        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-4 border-2 border-orange-200 hover:shadow-lg transition-all">
+                  <div className="mb-6">
+                    <h3 className="font-bold text-lg text-gray-200 mb-4">Identified Mudras</h3>
+                    <div className="space-y-3">
+                      {results.mudras.map((mudra, idx) => (
+                        <div key={idx} className="bg-gradient-to-r from-orange-900/30 to-red-900/30 border-orange-700 rounded-xl p-4 border-2 hover:shadow-lg transition-all duration-300 hover:scale-105">
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="text-lg font-bold text-gray-800">{mudra.name || mudra.mudra || mudra.gesture || `Detection ${idx + 1}`}</h4>
+                            <h4 className="text-lg font-bold text-gray-200">{mudra.name || mudra.mudra || `Detection ${idx + 1}`}</h4>
                             <span className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-1 rounded-full text-sm font-bold">
-                              {mudra.confidence || mudra.score || mudra.accuracy || 0}%
+                              {mudra.confidence || mudra.score || 0}%
                             </span>
                           </div>
-                          <p className="text-gray-600 text-sm">{mudra.description || mudra.desc || mudra.details || 'No description available'}</p>
-                          <div className="mt-2 bg-gray-200 rounded-full h-2 overflow-hidden">
+                          <p className="text-gray-400 text-sm">{mudra.description || 'No description available'}</p>
+                          <div className="bg-gray-600 rounded-full h-2 overflow-hidden mt-2">
                             <div
                               className="bg-gradient-to-r from-orange-500 to-red-600 h-full rounded-full transition-all duration-1000"
-                              style={{ width: `${mudra.confidence || mudra.score || mudra.accuracy || 0}%` }}
+                              style={{ width: `${mudra.confidence || mudra.score || 0}%` }}
                             />
                           </div>
                         </div>
-
-                        {/* Individual Mudra Detail Fields */}
-                        {(mudra.finfo || mudra.details || mudra.coordinates || mudra.angles || mudra.boundingBox || mudra.landmarks) && (
-                          <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-                            <h5 className="font-bold text-md text-gray-700 mb-3 flex items-center">
-                              <span className="mr-2">🔍</span>
-                              Mudra Detail Information
-                            </h5>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                              {/* Process mudra.finfo or other detail objects */}
-                              {(() => {
-                                const detailFields = {};
-                                
-                                // Extract fields from mudra.finfo if it exists
-                                if (mudra.finfo && typeof mudra.finfo === 'object') {
-                                  Object.assign(detailFields, mudra.finfo);
-                                }
-                                
-                                // Extract other common detail fields
-                                if (mudra.coordinates) detailFields.coordinates = mudra.coordinates;
-                                if (mudra.angles) detailFields.angles = mudra.angles;
-                                if (mudra.boundingBox) detailFields.boundingBox = mudra.boundingBox;
-                                if (mudra.landmarks) detailFields.landmarks = mudra.landmarks;
-                                if (mudra.position) detailFields.position = mudra.position;
-                                if (mudra.orientation) detailFields.orientation = mudra.orientation;
-                                if (mudra.dimensions) detailFields.dimensions = mudra.dimensions;
-                                if (mudra.area) detailFields.area = mudra.area;
-                                if (mudra.center) detailFields.center = mudra.center;
-                                if (mudra.bbox) detailFields.bbox = mudra.bbox;
-                                if (mudra.keypoints) detailFields.keypoints = mudra.keypoints;
-                                if (mudra.pose) detailFields.pose = mudra.pose;
-
-                                return Object.entries(detailFields).map(([key, value]) => {
-                                  const getFieldStyle = (key) => {
-                                    const lowerKey = key.toLowerCase();
-                                    if (lowerKey.includes('x') || lowerKey.includes('width') || lowerKey.includes('left')) {
-                                      return {
-                                        bg: 'from-blue-50 to-blue-100',
-                                        labelColor: 'text-blue-600',
-                                        valueColor: 'text-blue-900',
-                                        icon: '📐'
-                                      };
-                                    }
-                                    if (lowerKey.includes('y') || lowerKey.includes('height') || lowerKey.includes('top')) {
-                                      return {
-                                        bg: 'from-green-50 to-green-100',
-                                        labelColor: 'text-green-600',
-                                        valueColor: 'text-green-900',
-                                        icon: '📏'
-                                      };
-                                    }
-                                    if (lowerKey.includes('angle') || lowerKey.includes('rotation') || lowerKey.includes('orientation')) {
-                                      return {
-                                        bg: 'from-purple-50 to-purple-100',
-                                        labelColor: 'text-purple-600',
-                                        valueColor: 'text-purple-900',
-                                        icon: '🔄'
-                                      };
-                                    }
-                                    if (lowerKey.includes('center') || lowerKey.includes('midpoint')) {
-                                      return {
-                                        bg: 'from-orange-50 to-orange-100',
-                                        labelColor: 'text-orange-600',
-                                        valueColor: 'text-orange-900',
-                                        icon: '🎯'
-                                      };
-                                    }
-                                    if (lowerKey.includes('landmark') || lowerKey.includes('keypoint') || lowerKey.includes('point')) {
-                                      return {
-                                        bg: 'from-pink-50 to-pink-100',
-                                        labelColor: 'text-pink-600',
-                                        valueColor: 'text-pink-900',
-                                        icon: '📍'
-                                      };
-                                    }
-                                    if (lowerKey.includes('area') || lowerKey.includes('size') || lowerKey.includes('dimension')) {
-                                      return {
-                                        bg: 'from-indigo-50 to-indigo-100',
-                                        labelColor: 'text-indigo-600',
-                                        valueColor: 'text-indigo-900',
-                                        icon: '📊'
-                                      };
-                                    }
-                                    return {
-                                      bg: 'from-gray-50 to-gray-100',
-                                      labelColor: 'text-gray-600',
-                                      valueColor: 'text-gray-900',
-                                      icon: '📋'
-                                    };
-                                  };
-
-                                  const formatValue = (val) => {
-                                    if (typeof val === 'object' && val !== null) {
-                                      if (Array.isArray(val)) {
-                                        return val.map(v => typeof v === 'object' ? JSON.stringify(v) : v).join(', ');
-                                      }
-                                      return JSON.stringify(val, null, 2);
-                                    }
-                                    if (typeof val === 'number') {
-                                      return val.toFixed(2);
-                                    }
-                                    if (typeof val === 'boolean') {
-                                      return val ? 'Yes' : 'No';
-                                    }
-                                    return String(val);
-                                  };
-
-                                  const formatLabel = (label) => {
-                                    return label
-                                      .replace(/([A-Z])/g, ' $1')
-                                      .replace(/^./, str => str.toUpperCase())
-                                      .replace(/([a-z])([A-Z])/g, '$1 $2')
-                                      .trim();
-                                  };
-
-                                  const style = getFieldStyle(key);
-
-                                  return (
-                                    <div key={key} className={`bg-gradient-to-br ${style.bg} rounded-lg p-3 border shadow-sm hover:shadow-md transition-all`}>
-                                      <div className="flex items-center space-x-2 mb-1">
-                                        <span className="text-sm">{style.icon}</span>
-                                        <p className={`${style.labelColor} text-xs font-semibold`}>{formatLabel(key)}</p>
-                                      </div>
-                                      <p className={`${style.valueColor} text-sm font-bold break-words`} title={formatValue(value)}>
-                                        {formatValue(value)}
-                                      </p>
-                                    </div>
-                                  );
-                                });
-                              })()}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 )}
-
-                {/* Full API Response */}
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                  <h3 className="font-bold text-lg text-gray-800 mb-4">Full API Response</h3>
-                  <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-auto max-h-64 font-mono text-sm">
-                    <pre>{JSON.stringify(results.fullApiResponse, null, 2)}</pre>
-                  </div>
-                </div>
-
               </div>
             )}
 
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
+            <div className="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl shadow-xl p-6 text-white">
               <div className="flex items-start space-x-3">
                 <Info className="w-6 h-6 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="font-bold text-lg mb-2">About This System</h3>
-                  <p className="text-blue-100 text-sm leading-relaxed">
+                  <p className="text-blue-200 text-sm leading-relaxed">
                     This ML-powered system identifies mudras (hand gestures) from various Bharatiya Natya dance forms. 
                     Using advanced computer vision and deep learning models, it can detect and classify mudras from 
                     full-body images or close-up hand shots with high accuracy. Upload an image or use your camera to begin.
@@ -932,4 +773,3 @@ function Mudra() {
 }
 
 export default Mudra;
-    
