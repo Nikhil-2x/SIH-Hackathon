@@ -1,14 +1,13 @@
 import React from "react";
-
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import DefaultLayout from "./layouts/DefaultLayout";
-import Mudra from "./pages/Mudra";
+import Mudra from "./components/Mudra/Mudra";
 
 const App = () => {
   return (
     <div>
-      <Routes>
+      {/* <Routes>
         <Route
           path="/"
           element={
@@ -19,8 +18,8 @@ const App = () => {
         />
 
         <Route path="/dashboard" element={<Mudra />} />
-      </Routes>
-      {/* <Mudra /> */}
+      </Routes> */}
+      <Mudra />
     </div>
   );
 };
