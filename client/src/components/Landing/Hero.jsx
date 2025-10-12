@@ -26,7 +26,7 @@ const Hero = () => {
       <div
         style={{
           position: "absolute",
-          top: "70%",
+          top: "85%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           textAlign: "center",
@@ -37,7 +37,7 @@ const Hero = () => {
         <div ref={containerRef} style={{ position: "relative" }}>
           <h1>
             <VariableProximity
-              label={"Welcome to Mediterate"}
+              label={"Welcome"}
               className={"variable-proximity-demo"}
               fromFontVariationSettings="'wght' 400, 'opsz' 9"
               toFontVariationSettings="'wght' 1000, 'opsz' 40"
@@ -49,7 +49,7 @@ const Hero = () => {
         </div>
         <h2>
           <ShinyText
-            text="A gamified MIL Learning Experience"
+            text="Experience the magic of Indian dance reimagined"
             disabled={false}
             speed={3}
             className="custom-class"

@@ -11,10 +11,10 @@ const HeroLights = () => {
       <directionalLight position={[2, 5, 5]} intensity={1.5} castShadow />
 
       {/* Warm fill from the side */}
-      <pointLight position={[-3, 2, 5]} intensity={1} color="#ffd1a8" />
+      <pointLight position={[-3, 2, 5]} intensity={30} color="#ffd1a8" />
 
       {/* Blue rim light from behind */}
-      <pointLight position={[0, 5, -5]} intensity={1.2} color="#88ccff" />
+      <pointLight position={[0, 5, -5]} intensity={10} color="#88ccff" />
     </>
   );
 };

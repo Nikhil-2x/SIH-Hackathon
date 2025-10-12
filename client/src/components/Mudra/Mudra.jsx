@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, Settings } from 'lucide-react';
-import DanceFormSelector from './DanceFormSelector';
 import DetectionModeSelector from './DetectionModeSelector';
 import UploadTab from './uploadTab'
 import CameraTab from './CameraTab';
 import ResultsDisplay from './ResultsDisplay';
+import "./Mudra.css";
 import { analyzeMudra, startCamera, stopCamera, captureImage, resetAll } from '../hooks/imageutils';
-
 function Mudra() {
   const [activeTab, setActiveTab] = useState('upload');
   const [selectedDanceForm, setSelectedDanceForm] = useState('bharatanatyam');
@@ -87,10 +86,6 @@ function Mudra() {
       <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6">
-            <DanceFormSelector 
-              selectedDanceForm={selectedDanceForm}
-              setSelectedDanceForm={setSelectedDanceForm}
-            />
             
             <DetectionModeSelector 
               detectionMode={detectionMode}
