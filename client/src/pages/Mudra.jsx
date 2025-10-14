@@ -14,7 +14,9 @@ import {
   Eye,
   Zap,
   CheckCircle2,
+  Home,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Mudra() {
   const [activeTab, setActiveTab] = useState("upload");
@@ -31,6 +33,12 @@ function Mudra() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  const navigate = useNavigate();
+
+  const redirectToHome = () => {
+    navigate("/"); // Redirect to /somepage
+  };
 
   const danceForms = [
     { id: "bharatanatyam", name: "Bharatanatyam" },
@@ -434,6 +442,9 @@ function Mudra() {
               </div>
             </div>
             <div className="flex items-center space-x-3">
+              <button onClick={redirectToHome}>
+                <Home />
+              </button>
               <button className="bg-gray-600/30 hover:bg-gray-600/50 backdrop-blur-lg p-3 rounded-xl transition-all duration-300 hover:scale-105">
                 <Settings className="w-6 h-6" />
               </button>

@@ -12,7 +12,7 @@ const Hero = () => {
   const navigate = useNavigate();
 
   const onClickLogin = () => {
-    navigate(`/login`);
+    navigate(`/dashboard`);
   };
 
   return (

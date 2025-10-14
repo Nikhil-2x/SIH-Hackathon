@@ -87,7 +87,7 @@ const Navbar = () => {
       >
         <h2>
           <VariableProximity
-            label={"Sudo Bits"}
+            label={"MudraNET"}
             className={"variable-proximity-animated"}
             fromFontVariationSettings="'wght' 100, 'opsz' 9"
             toFontVariationSettings="'wght' 1000, 'opsz' 10"
@@ -130,7 +130,7 @@ const Navbar = () => {
               ...(location.pathname === "/login" ? styles.activeLink : {}),
             }}
           >
-            Login
+            Demo
           </Link>
         </li>
       </ul>
