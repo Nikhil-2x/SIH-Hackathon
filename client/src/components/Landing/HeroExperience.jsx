@@ -5,8 +5,7 @@ import HeroLights from "./HeroLights";
 import Particles from "./Particles";
 
 import * as THREE from "three";
-import { Dance } from "./Dance";
-import { Women } from "./Women";
+
 import { Womens } from "./WomenTwo";
 
 const HeroExperience = () => {
@@ -29,7 +28,6 @@ const HeroExperience = () => {
           scale={[8, 8, 8]}
           rotation={[0, -Math.PI / 2, 0]}
         >
-          {/* <Dance /> */}
           {/* <Women /> */}
           <Womens />
         </group>
