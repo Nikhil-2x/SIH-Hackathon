@@ -25,7 +25,7 @@ function Mudra() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState(null);
   const [cameraActive, setCameraActive] = useState(false);
-  const [detectionMode, setDetectionMode] = useState("full-body");
+  const [detectionMode, setDetectionMode] = useState("hands-only");
   const [error, setError] = useState("");
   const [resultImageData, setResultImageData] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -52,12 +52,11 @@ function Mudra() {
   const mockMudras = [
     {
       name: "Pataka",
-      confidence: 94.5,
+      confidence: 73.4,
       description: "Flag - All fingers extended",
     },
-    { name: "Tripataka", confidence: 87.2, description: "Three parts of flag" },
-    { name: "Ardhapataka", confidence: 82.8, description: "Half flag" },
-    { name: "Kartarimukha", confidence: 78.3, description: "Scissors face" },
+    { name: "Tripataka", confidence: 40.3, description: "Three parts of flag" },
+    { name: "Ardhapataka", confidence: 10.7, description: "Half flag" },
   ];
 
   const handleFileUpload = (e) => {
@@ -245,6 +244,8 @@ function Mudra() {
         body: formData,
       });
 
+      console.log(resp);
+
       if (!resp.ok)
         throw new Error(
           `API returned status ${resp.status} ${resp.statusText}`
@@ -259,6 +260,7 @@ function Mudra() {
       if (contentType.includes("application/json")) {
         const json = await resp.json();
         fullApiResponse = json;
+        console.log("full:", fullApiResponse);
         extracted = await extractImageFromApiResponse(json);
         if (!extracted) {
           throw new Error("API returned JSON but no base64 image field found");
@@ -368,7 +370,7 @@ function Mudra() {
             fullApiResponse?.quality ||
             "Excellent",
           handsDetected:
-            fullApiResponse?.handsDetected || fullApiResponse?.handsCount || 2,
+            fullApiResponse?.handsDetected || fullApiResponse?.handsCount || 1,
           bodyPoseConfidence:
             fullApiResponse?.bodyPoseConfidence ||
             fullApiResponse?.confidence ||
@@ -433,9 +435,7 @@ function Mudra() {
                 <Sparkles className="w-8 h-8" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold tracking-tight">
-                  Mudra Vision AI
-                </h1>
+                <h1 className="text-4xl font-bold tracking-tight">MudraNET</h1>
                 <p className="text-gray-300 mt-1">
                   Bharatiya Natya Gesture Recognition System
                 </p>
@@ -494,16 +494,6 @@ function Mudra() {
               </div>
               <div className="space-y-3">
                 <button
-                  onClick={() => setDetectionMode("full-body")}
-                  className={`w-full p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
-                    detectionMode === "full-body"
-                      ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg scale-105"
-                      : "bg-gray-700 hover:bg-gray-600 text-gray-300"
-                  }`}
-                >
-                  Full Body Analysis
-                </button>
-                <button
                   onClick={() => setDetectionMode("hands-only")}
                   className={`w-full p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                     detectionMode === "hands-only"
@@ -512,6 +502,16 @@ function Mudra() {
                   }`}
                 >
                   Hands Only
+                </button>
+                <button
+                  onClick={() => alert("Under progress")}
+                  className={`w-full p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
+                    detectionMode === "full-body"
+                      ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg scale-105"
+                      : "bg-gray-700 hover:bg-gray-600 text-gray-300"
+                  }`}
+                >
+                  Full Body Analysis
                 </button>
               </div>
             </div>
