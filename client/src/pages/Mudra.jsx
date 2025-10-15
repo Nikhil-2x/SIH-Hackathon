@@ -17,6 +17,7 @@ import {
   Home,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ParticleBackground from "../components/Landing/ParticleBackground";
 
 function Mudra() {
   const [activeTab, setActiveTab] = useState("upload");
@@ -426,40 +427,59 @@ function Mudra() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-white shadow-2xl">
+    <div
+      className="min-h-screen w-full"
+      style={{
+        background: "#000",
+        minHeight: "100vh",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      <ParticleBackground />
+      <div
+        className="shadow-2xl"
+        style={{
+          background: "transparent",
+          color: "white",
+          position: "relative",
+          zIndex: 2,
+        }}
+      >
         <div className="container mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="bg-gray-600/30 backdrop-blur-lg p-3 rounded-2xl">
-                <Sparkles className="w-8 h-8" />
+              <div className="bg-black/60 backdrop-blur-lg p-3 rounded-2xl">
+                <Sparkles className="w-8 h-8 text-purple-300" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold tracking-tight">MudraNET</h1>
-                <p className="text-gray-300 mt-1">
+                <h1 className="text-4xl font-bold tracking-tight text-purple-100">
+                  MudraNET
+                </h1>
+                <p className="text-purple-200 mt-1">
                   Bharatiya Natya Gesture Recognition System
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <button onClick={redirectToHome}>
-                <Home />
+                <Home className="text-purple-200" />
               </button>
-              <button className="bg-gray-600/30 hover:bg-gray-600/50 backdrop-blur-lg p-3 rounded-xl transition-all duration-300 hover:scale-105">
-                <Settings className="w-6 h-6" />
+              <button className="bg-black/60 hover:bg-black/80 backdrop-blur-lg p-3 rounded-xl transition-all duration-300 hover:scale-105">
+                <Settings className="w-6 h-6 text-purple-200" />
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-8" style={{ position: "relative", zIndex: 2 }}>
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-6 border">
+            <div className="bg-[rgba(30,30,30,0.75)] backdrop-blur-lg border border-gray-300 rounded-2xl shadow-xl p-6">
               <div className="flex items-center space-x-2 mb-4">
-                <BookOpen className="w-5 h-5 text-orange-400" />
-                <h2 className="text-xl font-bold text-gray-200">
+                <BookOpen className="w-5 h-5 text-purple-400" />
+                <h2 className="text-xl font-bold text-purple-100">
                   Select Dance Form
                 </h2>
               </div>
@@ -470,14 +490,14 @@ function Mudra() {
                     onClick={() => setSelectedDanceForm(form.id)}
                     className={`w-full text-left p-4 rounded-xl transition-all duration-300 hover:scale-105 ${
                       selectedDanceForm === form.id
-                        ? `bg-gradient-to-r ${form.color} text-white shadow-lg scale-105`
-                        : "bg-gray-700 hover:bg-gray-600 text-gray-300"
+                        ? "bg-gradient-to-r from-purple-400 to-indigo-300 text-white shadow-lg scale-105"
+                        : "bg-black/40 hover:bg-black/60 text-purple-200"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-semibold">{form.name}</span>
                       {selectedDanceForm === form.id && (
-                        <CheckCircle2 className="w-5 h-5" />
+                        <CheckCircle2 className="w-5 h-5 text-purple-300" />
                       )}
                     </div>
                   </button>
@@ -485,10 +505,10 @@ function Mudra() {
               </div>
             </div>
 
-            <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-6 border">
+            <div className="bg-[rgba(30,30,30,0.75)] backdrop-blur-lg border border-gray-300 rounded-2xl shadow-xl p-6">
               <div className="flex items-center space-x-2 mb-4">
-                <Eye className="w-5 h-5 text-orange-400" />
-                <h2 className="text-xl font-bold text-gray-200">
+                <Eye className="w-5 h-5 text-purple-400" />
+                <h2 className="text-xl font-bold text-purple-100">
                   Detection Mode
                 </h2>
               </div>
@@ -497,8 +517,8 @@ function Mudra() {
                   onClick={() => setDetectionMode("hands-only")}
                   className={`w-full p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                     detectionMode === "hands-only"
-                      ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg scale-105"
-                      : "bg-gray-700 hover:bg-gray-600 text-gray-300"
+                      ? "bg-gradient-to-r from-purple-400 to-indigo-300 text-white shadow-lg scale-105"
+                      : "bg-black/40 hover:bg-black/60 text-purple-200"
                   }`}
                 >
                   Hands Only
@@ -507,8 +527,8 @@ function Mudra() {
                   onClick={() => alert("Under progress")}
                   className={`w-full p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                     detectionMode === "full-body"
-                      ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg scale-105"
-                      : "bg-gray-700 hover:bg-gray-600 text-gray-300"
+                      ? "bg-gradient-to-r from-purple-400 to-indigo-300 text-white shadow-lg scale-105"
+                      : "bg-black/40 hover:bg-black/60 text-purple-200"
                   }`}
                 >
                   Full Body Analysis
@@ -516,19 +536,19 @@ function Mudra() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl shadow-xl p-6 text-white">
+            <div className="bg-[rgba(30,30,30,0.75)] backdrop-blur-lg rounded-2xl shadow-xl p-6 text-white border border-gray-300">
               <h3 className="font-bold text-lg mb-4">Model Performance</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-300">Accuracy</span>
+                  <span className="text-purple-200">Accuracy</span>
                   <span className="font-bold text-xl">94.7%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-300">Speed</span>
+                  <span className="text-purple-200">Speed</span>
                   <span className="font-bold text-xl">35 FPS</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-300">Mudras DB</span>
+                  <span className="text-purple-200">Mudras DB</span>
                   <span className="font-bold text-xl">52</span>
                 </div>
               </div>
@@ -536,14 +556,14 @@ function Mudra() {
           </div>
 
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl border overflow-hidden">
-              <div className="flex border-gray-700 border-b">
+            <div className="bg-[rgba(30,30,30,0.75)] backdrop-blur-lg border border-gray-300 rounded-2xl shadow-xl overflow-hidden">
+              <div className="flex border-purple-300 border-b">
                 <button
                   onClick={() => setActiveTab("upload")}
                   className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all duration-300 ${
                     activeTab === "upload"
-                      ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg"
-                      : "text-gray-300 hover:bg-gray-700"
+                      ? "bg-gradient-to-r from-purple-300 to-indigo-200 text-gray-900 shadow-md scale-105"
+                      : "text-gray-200 hover:bg-gray-100 hover:text-gray-900"
                   }`}
                 >
                   <Upload className="w-5 h-5" />
@@ -556,8 +576,8 @@ function Mudra() {
                   }}
                   className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all duration-300 ${
                     activeTab === "camera"
-                      ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg"
-                      : "text-gray-300 hover:bg-gray-700"
+                      ? "bg-gradient-to-r from-purple-300 to-indigo-200 text-gray-900 shadow-md scale-105"
+                      : "text-gray-200 hover:bg-gray-100 hover:text-gray-900"
                   }`}
                 >
                   <Camera className="w-5 h-5" />
@@ -567,8 +587,8 @@ function Mudra() {
                   onClick={() => setActiveTab("realtime")}
                   className={`flex-1 py-4 px-6 flex items-center justify-center space-x-2 transition-all duration-300 ${
                     activeTab === "realtime"
-                      ? "bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg"
-                      : "text-gray-300 hover:bg-gray-700"
+                      ? "bg-gradient-to-r from-purple-300 to-indigo-200 text-gray-900 shadow-md scale-105"
+                      : "text-gray-200 hover:bg-gray-100 hover:text-gray-900"
                   }`}
                 >
                   <Video className="w-5 h-5" />
@@ -581,13 +601,13 @@ function Mudra() {
                   {!uploadedImage ? (
                     <div
                       onClick={() => fileInputRef.current?.click()}
-                      className="border-4 border-dashed border-orange-400 hover:border-orange-300 hover:bg-orange-900/20 rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 hover:scale-105"
+                      className="border-4 border-dashed border-purple-400 hover:border-purple-300 hover:bg-black/40 rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 hover:scale-105"
                     >
-                      <Image className="w-16 h-16 mx-auto text-orange-400 mb-4" />
-                      <p className="text-xl font-semibold text-gray-200 mb-2">
+                      <Image className="w-16 h-16 mx-auto text-purple-400 mb-4" />
+                      <p className="text-xl font-semibold text-purple-100 mb-2">
                         Upload Dance Image
                       </p>
-                      <p className="text-gray-400">
+                      <p className="text-purple-300">
                         Click to browse or drag and drop your image here
                       </p>
                       <input
@@ -603,13 +623,13 @@ function Mudra() {
                       <img
                         src={uploadedImage}
                         alt="Uploaded"
-                        className="w-full h-96 object-contain rounded-xl bg-gray-700"
+                        className="w-full h-96 object-contain rounded-xl bg-black/60"
                       />
                       <div className="flex space-x-3">
                         <button
                           onClick={analyzeMudra}
                           disabled={isAnalyzing}
-                          className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:shadow-xl transition-all disabled:opacity-50 hover:scale-105"
+                          className="flex-1 bg-gradient-to-r from-purple-300 to-indigo-200 text-gray-900 shadow-md hover:shadow-xl hover:brightness-105 transition-all rounded-xl font-bold flex items-center justify-center space-x-2 py-4 disabled:opacity-50"
                         >
                           <Zap className="w-5 h-5" />
                           <span>
@@ -618,7 +638,7 @@ function Mudra() {
                         </button>
                         <button
                           onClick={resetAll}
-                          className="px-6 bg-gray-700 text-gray-300 hover:bg-gray-600 py-4 rounded-xl font-bold transition-all hover:scale-105"
+                          className="px-6 bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200 hover:shadow-md transition-all rounded-xl font-bold py-4"
                         >
                           <RotateCcw className="w-5 h-5" />
                         </button>
@@ -642,14 +662,14 @@ function Mudra() {
                   <div className="flex space-x-2 mt-3">
                     <button
                       onClick={captureImage}
-                      className="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-medium flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-all"
+                      className="flex-1 bg-gradient-to-r from-purple-300 to-indigo-200 text-gray-900 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 hover:bg-purple-800 transition-all"
                     >
                       <Camera className="w-4 h-4" />
                       <span>Capture Image</span>
                     </button>
                     <button
                       onClick={stopCamera}
-                      className="px-4 bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-all"
+                      className="px-4 bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-200 hover:shadow-md py-3 rounded-lg font-medium transition-all"
                     >
                       Stop
                     </button>
@@ -659,12 +679,12 @@ function Mudra() {
 
               {activeTab === "realtime" && (
                 <div className="p-6">
-                  <div className="bg-gray-800 rounded-lg p-12 text-center">
-                    <Video className="w-12 h-12 mx-auto text-indigo-400 mb-3" />
+                  <div className="bg-black/60 rounded-lg p-12 text-center border border-purple-900 backdrop-blur-xl">
+                    <Video className="w-12 h-12 mx-auto text-purple-400 mb-3" />
                     <p className="text-white text-lg font-medium mb-1">
                       Real-time Detection Coming Soon
                     </p>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-purple-300 text-sm">
                       Live mudra recognition with webcam feed
                     </p>
                   </div>
@@ -673,23 +693,23 @@ function Mudra() {
             </div>
 
             {error && (
-              <div className="bg-red-900/50 border-red-700 text-red-200 border-2 rounded-xl p-4">
+              <div className="bg-[rgba(30,30,30,0.75)] backdrop-blur-lg border-gray-300 text-gray-100 border-2 rounded-xl p-4">
                 <p className="font-semibold">{error}</p>
               </div>
             )}
 
             {resultImageData && (
-              <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-8 border">
+              <div className="bg-[rgba(30,30,30,0.75)] backdrop-blur-lg border border-gray-300 rounded-2xl shadow-xl p-8">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Image className="w-6 h-6 text-orange-400" />
-                    <h2 className="text-2xl font-bold text-gray-200">
+                    <Image className="w-6 h-6 text-purple-400" />
+                    <h2 className="text-2xl font-bold text-purple-100">
                       Processed Image
                     </h2>
                   </div>
                   <button
                     onClick={handleDownload}
-                    className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all flex items-center space-x-2 font-bold hover:scale-105"
+                    className="bg-gradient-to-r from-purple-400 to-indigo-300 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all flex items-center space-x-2 font-bold hover:scale-105"
                   >
                     <Download className="w-5 h-5" />
                     <span>Download</span>
@@ -704,15 +724,15 @@ function Mudra() {
             )}
 
             {results && (
-              <div className="bg-gray-800 border-gray-700 rounded-2xl shadow-xl p-8 border">
+              <div className="bg-[rgba(30,30,30,0.75)] backdrop-blur-lg border border-gray-300 rounded-2xl shadow-xl p-8">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Grid3x3 className="w-6 h-6 text-orange-400" />
-                    <h2 className="text-2xl font-bold text-gray-200">
+                    <Grid3x3 className="w-6 h-6 text-purple-400" />
+                    <h2 className="text-2xl font-bold text-purple-100">
                       Detection Results
                     </h2>
                   </div>
-                  <button className="bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-lg transition-all flex items-center space-x-2 hover:scale-105">
+                  <button className="bg-black/40 text-purple-200 hover:bg-black/60 px-4 py-2 rounded-lg transition-all flex items-center space-x-2 hover:scale-105">
                     <Download className="w-4 h-4" />
                     <span>Export</span>
                   </button>
@@ -721,16 +741,16 @@ function Mudra() {
                 {/* Three response cards: Hand Label, Mudra Info (selected), Mudra Name */}
                 {results.fullApiResponse && (
                   <div className="mb-8">
-                    <h3 className="font-bold text-lg text-gray-200 mb-4">
+                    <h3 className="font-bold text-lg text-purple-100 mb-4">
                       Response
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {/* Card 1: Hand Label */}
-                      <div className="bg-gradient-to-br from-blue-900/50 to-blue-800/50 border-blue-700 rounded-xl p-5 border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                        <p className="text-blue-300 text-xs uppercase tracking-wider font-semibold mb-2">
+                      <div className="bg-[rgba(30,30,30,0.85)] backdrop-blur-md border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                        <p className="text-purple-400 text-xs uppercase tracking-wider font-semibold mb-2">
                           Hand Label
                         </p>
-                        <p className="text-blue-100 text-2xl font-extrabold">
+                        <p className="text-purple-100 text-2xl font-extrabold">
                           {results.fullApiResponse.hand_label ||
                             results.fullApiResponse.Hand_Label ||
                             results.fullApiResponse.handLabel ||
@@ -739,8 +759,8 @@ function Mudra() {
                       </div>
 
                       {/* Card 2: Mudra Info (Depicts, Meaning, Usage only) */}
-                      <div className="bg-gradient-to-br from-indigo-900/50 to-violet-900/50 border-indigo-700 rounded-xl p-5 border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                        <p className="text-indigo-300 text-xs uppercase tracking-wider font-semibold mb-3">
+                      <div className="bg-[rgba(30,30,30,0.85)] backdrop-blur-md border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                        <p className="text-purple-400 text-xs uppercase tracking-wider font-semibold mb-3">
                           Mudra Details
                         </p>
                         {(() => {
@@ -791,11 +811,11 @@ function Mudra() {
                       </div>
 
                       {/* Card 3: Mudra Name */}
-                      <div className="bg-gradient-to-br from-emerald-900/50 to-teal-900/50 border-emerald-700 rounded-xl p-5 border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                        <p className="text-emerald-300 text-xs uppercase tracking-wider font-semibold mb-2">
+                      <div className="bg-[rgba(30,30,30,0.85)] backdrop-blur-md border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                        <p className="text-purple-400 text-xs uppercase tracking-wider font-semibold mb-2">
                           Mudra Name
                         </p>
-                        <p className="text-emerald-100 text-2xl font-extrabold">
+                        <p className="text-purple-100 text-2xl font-extrabold">
                           {results.fullApiResponse.mudra_name ||
                             results.fullApiResponse.Mudra_Name ||
                             results.fullApiResponse.mudraName ||
@@ -810,7 +830,7 @@ function Mudra() {
                 {results.fullApiResponse &&
                   Object.keys(results.fullApiResponse).length > 0 && (
                     <div className="mb-6">
-                      <h3 className="font-bold text-lg text-gray-200 mb-4">
+                      <h3 className="font-bold text-lg text-purple-100 mb-4">
                         API Response Fields
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -947,35 +967,35 @@ function Mudra() {
 
                 {/* Detection Metadata */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-blue-900/50 to-blue-800/50 border-blue-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                    <p className="text-blue-400 text-sm font-semibold">
+                  <div className="bg-black/40 border border-purple-300 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                    <p className="text-purple-400 text-sm font-semibold">
                       Processing Time
                     </p>
-                    <p className="text-blue-200 text-2xl font-bold">
+                    <p className="text-purple-100 text-2xl font-bold">
                       {results.metadata.processingTime}
                     </p>
                   </div>
-                  <div className="bg-gradient-to-br from-green-900/50 to-green-800/50 border-green-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                    <p className="text-green-400 text-sm font-semibold">
+                  <div className="bg-black/40 border border-purple-300 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                    <p className="text-purple-400 text-sm font-semibold">
                       Image Quality
                     </p>
-                    <p className="text-green-200 text-2xl font-bold">
+                    <p className="text-purple-100 text-2xl font-bold">
                       {results.metadata.imageQuality}
                     </p>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-900/50 to-purple-800/50 border-purple-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                  <div className="bg-black/40 border border-purple-300 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
                     <p className="text-purple-400 text-sm font-semibold">
                       Hands Detected
                     </p>
-                    <p className="text-purple-200 text-2xl font-bold">
+                    <p className="text-purple-100 text-2xl font-bold">
                       {results.metadata.handsDetected}
                     </p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-900/50 to-orange-800/50 border-orange-700 rounded-xl p-4 text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
-                    <p className="text-orange-400 text-sm font-semibold">
+                  <div className="bg-black/40 border border-purple-300 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                    <p className="text-purple-400 text-sm font-semibold">
                       Pose Confidence
                     </p>
-                    <p className="text-orange-200 text-2xl font-bold">
+                    <p className="text-purple-100 text-2xl font-bold">
                       {results.metadata.bodyPoseConfidence}%
                     </p>
                   </div>
@@ -984,31 +1004,31 @@ function Mudra() {
                 {/* Identified Mudras */}
                 {results.mudras && results.mudras.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="font-bold text-lg text-gray-200 mb-4">
+                    <h3 className="font-bold text-lg text-purple-100 mb-4">
                       Identified Mudras
                     </h3>
                     <div className="space-y-3">
                       {results.mudras.map((mudra, idx) => (
                         <div
                           key={idx}
-                          className="bg-gradient-to-r from-orange-900/30 to-red-900/30 border-orange-700 rounded-xl p-4 border-2 hover:shadow-lg transition-all duration-300 hover:scale-105"
+                          className="bg-black/90 bg-opacity-80 backdrop-blur-md border border-purple-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 hover:scale-105"
                         >
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="text-lg font-bold text-gray-200">
+                            <h4 className="text-lg font-bold text-purple-100">
                               {mudra.name ||
                                 mudra.mudra ||
                                 `Detection ${idx + 1}`}
                             </h4>
-                            <span className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-1 rounded-full text-sm font-bold">
+                            <span className="bg-gradient-to-r from-purple-400 to-indigo-300 text-white px-4 py-1 rounded-full text-sm font-bold">
                               {mudra.confidence || mudra.score || 0}%
                             </span>
                           </div>
-                          <p className="text-gray-400 text-sm">
+                          <p className="text-purple-300 text-sm">
                             {mudra.description || "No description available"}
                           </p>
-                          <div className="bg-gray-600 rounded-full h-2 overflow-hidden mt-2">
+                          <div className="bg-purple-900 rounded-full h-2 overflow-hidden mt-2">
                             <div
-                              className="bg-gradient-to-r from-orange-500 to-red-600 h-full rounded-full transition-all duration-1000"
+                              className="bg-gradient-to-r from-purple-400 to-indigo-300 h-full rounded-full transition-all duration-1000"
                               style={{
                                 width: `${
                                   mudra.confidence || mudra.score || 0
@@ -1024,12 +1044,14 @@ function Mudra() {
               </div>
             )}
 
-            <div className="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl shadow-xl p-6 text-white">
+            <div className="bg-black/70 backdrop-blur-xl rounded-2xl shadow-xl p-6 text-white border border-purple-300">
               <div className="flex items-start space-x-3">
-                <Info className="w-6 h-6 mt-1 flex-shrink-0" />
+                <Info className="w-6 h-6 mt-1 flex-shrink-0 text-purple-300" />
                 <div>
-                  <h3 className="font-bold text-lg mb-2">About This System</h3>
-                  <p className="text-blue-200 text-sm leading-relaxed">
+                  <h3 className="font-bold text-lg mb-2 text-purple-100">
+                    About This System
+                  </h3>
+                  <p className="text-purple-200 text-sm leading-relaxed">
                     This ML-powered system identifies mudras (hand gestures)
                     from various Bharatiya Natya dance forms. Using advanced
                     computer vision and deep learning models, it can detect and
