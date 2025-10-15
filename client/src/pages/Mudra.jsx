@@ -52,7 +52,7 @@ function Mudra() {
   const mockMudras = [
     {
       name: "Pataka",
-      confidence: 73.4,
+      confidence: 91.4,
       description: "Flag - All fingers extended",
     },
     { name: "Tripataka", confidence: 40.3, description: "Three parts of flag" },
@@ -718,28 +718,90 @@ function Mudra() {
                   </button>
                 </div>
 
-                {/* Mudra Information Fields */}
-                {results.fullApiResponse?.Mudra_info && (
-                  <div className="mb-6">
-                    <h3 className="font-semibold text-base text-gray-800 mb-4">
-                      Mudra Information
+                {/* Three response cards: Hand Label, Mudra Info (selected), Mudra Name */}
+                {results.fullApiResponse && (
+                  <div className="mb-8">
+                    <h3 className="font-bold text-lg text-gray-200 mb-4">
+                      Response
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {Object.entries(results.fullApiResponse.Mudra_info).map(
-                        ([key, value]) => (
-                          <div
-                            key={key}
-                            className="bg-indigo-50 rounded-lg p-4 border border-indigo-200"
-                          >
-                            <p className="text-indigo-600 text-sm font-medium mb-1">
-                              {key}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {/* Card 1: Hand Label */}
+                      <div className="bg-gradient-to-br from-blue-900/50 to-blue-800/50 border-blue-700 rounded-xl p-5 border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                        <p className="text-blue-300 text-xs uppercase tracking-wider font-semibold mb-2">
+                          Hand Label
+                        </p>
+                        <p className="text-blue-100 text-2xl font-extrabold">
+                          {results.fullApiResponse.hand_label ||
+                            results.fullApiResponse.Hand_Label ||
+                            results.fullApiResponse.handLabel ||
+                            "—"}
+                        </p>
+                      </div>
+
+                      {/* Card 2: Mudra Info (Depicts, Meaning, Usage only) */}
+                      <div className="bg-gradient-to-br from-indigo-900/50 to-violet-900/50 border-indigo-700 rounded-xl p-5 border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                        <p className="text-indigo-300 text-xs uppercase tracking-wider font-semibold mb-3">
+                          Mudra Details
+                        </p>
+                        {(() => {
+                          const info =
+                            results.fullApiResponse.mudra_info ||
+                            results.fullApiResponse.Mudra_info ||
+                            {};
+                          const get = (obj, keys) => {
+                            for (const k of keys) {
+                              if (obj && obj[k] != null && obj[k] !== "")
+                                return obj[k];
+                            }
+                            return null;
+                          };
+                          const depicts = get(info, ["Depicts", "depicts"]);
+                          const meaning = get(info, ["Meaning", "meaning"]);
+                          const usage = get(info, ["Usage", "usage"]);
+                          const rows = [
+                            { label: "Depicts", value: depicts },
+                            { label: "Meaning", value: meaning },
+                            { label: "Usage", value: usage },
+                          ].filter((r) => r.value != null);
+                          return rows.length > 0 ? (
+                            <ul className="space-y-2">
+                              {rows.map((r) => (
+                                <li
+                                  key={r.label}
+                                  className="flex items-start gap-3 bg-indigo-950/30 rounded-lg p-3 border border-indigo-800/60"
+                                >
+                                  <span className="mt-1 h-2 w-2 rounded-full bg-indigo-400 flex-shrink-0" />
+                                  <div>
+                                    <p className="text-indigo-300 text-xs font-semibold uppercase tracking-wider">
+                                      {r.label}
+                                    </p>
+                                    <p className="text-indigo-100 text-sm font-medium leading-relaxed">
+                                      {String(r.value)}
+                                    </p>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-indigo-200/70 text-sm">
+                              No details available
                             </p>
-                            <p className="text-gray-800 font-semibold">
-                              {value}
-                            </p>
-                          </div>
-                        )
-                      )}
+                          );
+                        })()}
+                      </div>
+
+                      {/* Card 3: Mudra Name */}
+                      <div className="bg-gradient-to-br from-emerald-900/50 to-teal-900/50 border-emerald-700 rounded-xl p-5 border shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                        <p className="text-emerald-300 text-xs uppercase tracking-wider font-semibold mb-2">
+                          Mudra Name
+                        </p>
+                        <p className="text-emerald-100 text-2xl font-extrabold">
+                          {results.fullApiResponse.mudra_name ||
+                            results.fullApiResponse.Mudra_Name ||
+                            results.fullApiResponse.mudraName ||
+                            "—"}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -756,6 +818,9 @@ function Mudra() {
                           ([key, value]) => {
                             if (
                               key === "Mudra_info" ||
+                              key === "mudra_info" ||
+                              key === "hand_label" ||
+                              key === "mudra_name" ||
                               key === "image_base64" ||
                               (typeof value === "string" &&
                                 (value.includes("data:image") ||
