@@ -629,13 +629,13 @@ function Mudra() {
               )}
 
               {activeTab === "camera" && (
-                <div className="p-6">
+                <div className="flex flex-col h-[calc(100vh-5rem)] p-2">
                   <div className="relative bg-black rounded-lg overflow-hidden">
                     <video
                       ref={videoRef}
                       autoPlay
                       playsInline
-                      className="w-full h-80 object-cover"
+                      className="w-full h-full object-cover"
                     />
                     <canvas ref={canvasRef} className="hidden" />
                   </div>
