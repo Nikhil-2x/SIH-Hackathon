@@ -9,18 +9,21 @@ const ParticleBackground = ({ showControls = false, children }) => {
   return (
     <div
       style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
+        position: "fixed",
+        inset: 0,
+        width: "100vw",
+        height: "100vh",
+        maxWidth: "100vw",
+        maxHeight: "100vh",
+        overflow: "hidden",
         zIndex: 1,
+        pointerEvents: "none",
       }}
     >
       <Canvas camera={{ position: [0, 0, 16], fov: 45 }}>
         <Suspense fallback={null}>
           <HeroLights />
-          <Particles count={80} />
+          <Particles count={60} />
           {showControls && (
             <OrbitControls
               enableZoom={false}
@@ -38,3 +41,4 @@ const ParticleBackground = ({ showControls = false, children }) => {
 };
 
 export default ParticleBackground;
+
